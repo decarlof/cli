@@ -14,7 +14,6 @@ from cli import __version__
 
 LOGS_HOME = os.path.join(str(pathlib.Path.home()), 'logs')
 CONFIG_FILE_NAME = os.path.join(str(pathlib.Path.home()), 'cli.conf')
-ROTATION_AXIS_FILE_NAME = "rotation_axis.json"
 
 SECTIONS = OrderedDict()
 
@@ -30,15 +29,6 @@ SECTIONS['general'] = {
         'type': str,
         'help': "Log file directory",
         'metavar': 'FILE'},
-    'copy-log': {
-        'default': False,
-        'help': 'Verbose output',
-        'action': 'store_true'},
-    'rotation-axis-file': {
-        'default': ROTATION_AXIS_FILE_NAME,
-        'type': str,
-        'help': "File name of rataion axis locations",
-        'metavar': 'FILE'},
     'verbose': {
         'default': False,
         'help': 'Verbose output',
@@ -46,6 +36,10 @@ SECTIONS['general'] = {
         }
 
 SECTIONS['task-specific'] = {
+    'copy-log': {
+        'default': False,
+        'help': 'Verbose output',
+        'action': 'store_true'},
     'file-name': {
         'default': '.',
         'type': str,
@@ -240,8 +234,8 @@ def update_log(args):
         sections = GENERAL_PARAMS
         write(args.config, args=args, sections=sections)
         if (args.copy_log):
-            tail = os.sep + os.path.splitext(os.path.basename(args.file_name))[0]+ '_rec' + os.sep 
-            log_fname = os.path.dirname(args.file_name) + '_rec' + tail + os.path.split(args.config)[1]
+            head, tail = os.path.split(args.file_name)
+            log_fname = head + os.sep + "test" + os.path.split(args.config)[1]
             try:
                 shutil.copyfile(args.config, log_fname)
                 log.info('  *** copied %s to %s ' % (args.config, log_fname))

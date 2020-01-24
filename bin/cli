@@ -28,8 +28,8 @@ def run_status(args):
   
 def run_task(args):
     module.task(args)
-    config.log_values(args)
-
+    # update tomopy.conf
+    config.update_log(args)
 
 
 def main():
